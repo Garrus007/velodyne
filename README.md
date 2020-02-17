@@ -20,3 +20,10 @@ testing has not been completed in those environments.
 - <sup>1</sup>Velodyne: http://www.ros.org/wiki/velodyne
 - <sup>2</sup>ROS: http://www.ros.org
 - <sup>3</sup>`Velodyne high definition 3D LIDARs`: http://www.velodynelidar.com/lidar/lidar.aspx
+
+**Changes in this fork**:
+
+Added `distance` and `azimuth` fields for the `PointCloud2`.
+
+
+**Warning**: this functionality isn't tested.
