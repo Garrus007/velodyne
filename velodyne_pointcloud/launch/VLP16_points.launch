@@ -21,7 +21,7 @@
   <arg name="timestamp_first_packet" default="false" />
   <arg name="laserscan_ring" default="-1" />
   <arg name="laserscan_resolution" default="0.007" />
-  <arg name="organize_cloud" default="false" />
+  <arg name="organize_cloud" default="true" />
 
   <!-- start nodelet manager and driver nodelets -->
   <include file="$(find velodyne_driver)/launch/nodelet_manager.launch">

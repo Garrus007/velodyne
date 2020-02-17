@@ -11,15 +11,18 @@ namespace velodyne_pointcloud
       boost::shared_ptr<tf::TransformListener> tf_ptr)
     : DataContainerBase(
         max_range, min_range, target_frame, fixed_frame,
-        num_lasers, 0, false, scans_per_block, tf_ptr, 6,
+        num_lasers, 0, false, scans_per_block, tf_ptr, 8,
         "x", 1, sensor_msgs::PointField::FLOAT32,
         "y", 1, sensor_msgs::PointField::FLOAT32,
         "z", 1, sensor_msgs::PointField::FLOAT32,
         "intensity", 1, sensor_msgs::PointField::FLOAT32,
         "ring", 1, sensor_msgs::PointField::UINT16,
-        "time", 1, sensor_msgs::PointField::FLOAT32),
+        "time", 1, sensor_msgs::PointField::FLOAT32,
+        "distance", 1, sensor_msgs::PointField::FLOAT32,
+        "azimuth", 1, sensor_msgs::PointField::UINT16),
         iter_x(cloud, "x"), iter_y(cloud, "y"), iter_z(cloud, "z"),
-        iter_intensity(cloud, "intensity"), iter_ring(cloud, "ring"), iter_time(cloud, "time")
+        iter_intensity(cloud, "intensity"), iter_ring(cloud, "ring"), iter_time(cloud, "time"),
+        iter_distance(cloud, "distance"), iter_azimuth(cloud, "azimuth")
   {
   }
 
@@ -31,6 +34,8 @@ namespace velodyne_pointcloud
     iter_ring = iter_ring + config_.init_width;
     iter_intensity = iter_intensity + config_.init_width;
     iter_time = iter_time + config_.init_width;
+    iter_distance = iter_distance + config_.init_width;
+    iter_azimuth = iter_azimuth + config_.init_width;
     ++cloud.height;
   }
 
@@ -42,11 +47,13 @@ namespace velodyne_pointcloud
     iter_intensity = sensor_msgs::PointCloud2Iterator<float>(cloud, "intensity");
     iter_ring = sensor_msgs::PointCloud2Iterator<uint16_t >(cloud, "ring");
     iter_time = sensor_msgs::PointCloud2Iterator<float >(cloud, "time");
+    iter_distance = sensor_msgs::PointCloud2Iterator<float>(cloud, "distance");
+    iter_azimuth = sensor_msgs::PointCloud2Iterator<uint16_t>(cloud, "azimuth");
   }
 
 
   void OrganizedCloudXYZIR::addPoint(float x, float y, float z,
-      const uint16_t ring, const uint16_t /*azimuth*/, const float distance, const float intensity, const float time)
+      const uint16_t ring, const uint16_t azimuth, const float distance, const float intensity, const float time)
   {
     /** The laser values are not ordered, the organized structure
      * needs ordered neighbour points. The right order is defined
@@ -54,6 +61,9 @@ namespace velodyne_pointcloud
      * To keep the right ordering, the filtered values are set to
      * NaN.
      */
+
+    // TOOD: I'm not sure that I have correctly added distance and azimuth
+
     if (pointInRange(distance))
     {
       if(config_.transform)
@@ -65,6 +75,8 @@ namespace velodyne_pointcloud
       *(iter_intensity+ring) = intensity;
       *(iter_ring+ring) = ring;
       *(iter_time+time) = time;
+      *(iter_distance+ring) = distance;
+      *(iter_azimuth+ring) = azimuth;
     }
     else
     {
@@ -74,6 +86,8 @@ namespace velodyne_pointcloud
       *(iter_intensity+ring) = nanf("");
       *(iter_ring+ring) = ring;
       *(iter_time+time) = time;
+      *(iter_distance+ring) = nanf("");
+      *(iter_azimuth+ring) = azimuth;
     }
   }
 }

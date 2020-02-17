@@ -54,8 +54,8 @@ public:
                         const float intensity, const float time);
 
 private:
-  sensor_msgs::PointCloud2Iterator<float> iter_x, iter_y, iter_z, iter_intensity, iter_time;
-  sensor_msgs::PointCloud2Iterator<uint16_t> iter_ring;
+  sensor_msgs::PointCloud2Iterator<float> iter_x, iter_y, iter_z, iter_intensity, iter_time, iter_distance;
+  sensor_msgs::PointCloud2Iterator<uint16_t> iter_ring, iter_azimuth;
 };
 } /* namespace velodyne_pointcloud */
 #endif  // VELODYNE_POINTCLOUD_ORGANIZED_CLOUDXYZIR_H
