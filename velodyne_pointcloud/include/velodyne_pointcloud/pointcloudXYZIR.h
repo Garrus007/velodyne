@@ -52,8 +52,8 @@ public:
   virtual void addPoint(float x, float y, float z, const uint16_t ring, const uint16_t azimuth,
                         const float distance, const float intensity, const float time);
 
-  sensor_msgs::PointCloud2Iterator<float> iter_x, iter_y, iter_z, iter_intensity, iter_time;
-  sensor_msgs::PointCloud2Iterator<uint16_t> iter_ring;
+  sensor_msgs::PointCloud2Iterator<float> iter_x, iter_y, iter_z, iter_intensity, iter_time, iter_distance;
+  sensor_msgs::PointCloud2Iterator<uint16_t> iter_ring, iter_azimuth;
 };
 }  // namespace velodyne_pointcloud
 
